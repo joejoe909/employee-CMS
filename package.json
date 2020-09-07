@@ -1,0 +1,24 @@
+{
+  "name": "employee-cms",
+  "version": "1.0.0",
+  "description": "manages employees within a given organization.",
+  "main": "employeeCMS.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joejoe909/employee-CMS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joejoe909/employee-CMS/issues"
+  },
+  "homepage": "https://github.com/joejoe909/employee-CMS#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
