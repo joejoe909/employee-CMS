@@ -33,3 +33,26 @@ function menuStart(){
         }
     })
 }
+
+function addMenu(){
+    inquirer.prompt({
+        name: "AddSection",
+        type: "list",
+        message: "Would you like to add a [Department], add a [Role] or add an [Employee] or go [Back]?",
+        choices:["Department", "Role", "Employee", "Back"]
+    }).then(function(answer){
+        if(answer.AddSection === "Department"){
+            //add department
+        }else if(answer.AddSection === "Role"){
+        //add role
+        }else if(answer.AddSection === "Employee"){
+            //add employee
+        }else{
+            //go back
+        }
+    })
+}
+
+function update(){
+    
+}
