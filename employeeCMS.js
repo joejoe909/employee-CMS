@@ -1,5 +1,6 @@
 let mysql = require("mysql");
 let inquirer = require("inquirer");
+let qu = require("./query");
 
 //create connection
 let connection = mysql.createConnection({
@@ -23,11 +24,11 @@ function menuStart(){
         choices:["Add", "View", "Update", "Quit"]
     }).then(function(answer){
         if(answer.Welcome === "Add"){
-            //add menu function
+            addMenu();
         }else if(answer.Welcome === "View"){
-            //View
+           view()
         }else if(answer.Welcome === "Update"){
-            //Update
+            update();
         }else{
             connection.end();
         }
@@ -42,17 +43,49 @@ function addMenu(){
         choices:["Department", "Role", "Employee", "Back"]
     }).then(function(answer){
         if(answer.AddSection === "Department"){
-            //add department
+           addDepartment();
         }else if(answer.AddSection === "Role"){
         //add role
         }else if(answer.AddSection === "Employee"){
             //add employee
         }else{
-            //go back
+           menuStart();
         }
     })
 }
 
+function view(){
+    inquirer.prompt({
+        name: "ViewSection",
+        type: "list",
+        message: "Would you like to view [Departments], [Managers], [employees] or go [Back}?",
+        choices:["Departments", "Managers", "Employees", "Back"]
+    }).then(function(answer){
+        if(answer.ViewSection === "Departments"){
+            //viewDept()
+        }else if(answer.ViewSection === "Managers"){
+            //viewMgr()
+        }else if(answer.ViewSection === "Employees"){
+            //viewEmp()
+        }else{
+            menuStart();
+        }
+    })
+}
+
+
 function update(){
-    
+    inquirer.prompt({
+        name: "updateRole",
+        type: "list",
+        message: "[Search] for employee to update, or go [Back]",
+        choices: ["Search", "Back"]
+    }).then(function(answer){
+        //find employee prompt with role to change.
+        if(answer.updateRole === "Search"){
+            //searchToUpdateRole()
+        }else if(answer.updateRole === "Back"){
+            menuStart();
+        }
+    })
 }
