@@ -1,6 +1,5 @@
 let mysql = require("mysql");
 let inquirer = require("inquirer");
-let qu = require("./query");
 
 //create connection
 let connection = mysql.createConnection({
@@ -13,6 +12,7 @@ let connection = mysql.createConnection({
 
 connection.connect(function(err){
     if(err) throw err;
+    console.log("connected");
     menuStart();
 });
 
@@ -43,11 +43,11 @@ function addMenu(){
         choices:["Department", "Role", "Employee", "Back"]
     }).then(function(answer){
         if(answer.AddSection === "Department"){
-           addDepartment();
+            addDepartment();
         }else if(answer.AddSection === "Role"){
-        //add role
+            addRole();
         }else if(answer.AddSection === "Employee"){
-            //add employee
+           addEmployee();
         }else{
            menuStart();
         }
@@ -58,15 +58,15 @@ function view(){
     inquirer.prompt({
         name: "ViewSection",
         type: "list",
-        message: "Would you like to view [Departments], [Managers], [employees] or go [Back}?",
-        choices:["Departments", "Managers", "Employees", "Back"]
+        message: "Would you like to view [Departments], [Roles], [employees] or go [Back}?",
+        choices:["Departments", "Roles", "Employees", "Back"]
     }).then(function(answer){
         if(answer.ViewSection === "Departments"){
-            //viewDept()
-        }else if(answer.ViewSection === "Managers"){
-            //viewMgr()
+            viewDept();
+        }else if(answer.ViewSection === "Roles"){
+            viewRoles();
         }else if(answer.ViewSection === "Employees"){
-            //viewEmp()
+            viewEmp();
         }else{
             menuStart();
         }
@@ -87,5 +87,140 @@ function update(){
         }else if(answer.updateRole === "Back"){
             menuStart();
         }
+    })
+}
+
+
+function addDepartment(){
+   let depQuestions = [
+        {
+            type: "input",
+            message: "What is the name of the department?",
+            name: "deptName"
+        }
+    ];
+
+    inquirer.prompt(depQuestions).then(function(newDept) {
+        connection.query("INSERT INTO department SET ?", 
+        {
+           name: newDept.deptName,
+        },
+        function(err){
+            if(err)throw err;
+            console.log("Write successful...");
+            menuStart();
+        }
+        );
+         
+    });
+}
+
+function addRole() {
+    roleQuestion = [
+        {
+            type: "input",
+            message: "Please enter the Title of the role you wish to input",
+            name: "title"
+        },
+        {
+            type: "input",
+            message: "Enter the salary of the role",
+            name: "salary",
+            validate: function (value) {
+                let valid = !isNaN(parseFloat(value));
+                return valid || "Please enter a numerical value";
+            },
+            filter: Number,
+        },
+        {
+            type: "input",
+            message: "What is the role ID",
+            name: "roleID",
+            validate: function (value) {
+                let valid = !isNaN(parseFloat(value));
+                return valid || "Please enter a numerical value";
+            },
+            filter: Number,
+        },
+    ];
+    inquirer.prompt(roleQuestion).then(function (newRole) {
+        connection.query("INSERT INTO department SET ?",
+            {
+                title: newRole.title,
+                salary: newRole.salary,
+                department_id: newRole.roleID
+            },
+            function (err) {
+                if (err) throw err;
+                console.log("Write successful...");
+                menuStart();
+            });
+    });
+}
+
+function addEmployee(){
+    let empQ = [
+        {
+            type:"input",
+            name: "firstName",
+            message: "What is the first name of the employee?"
+        },
+        {
+            type:"input",
+            name: "lastName",
+            message:"What is the last name of the employee?"
+        },
+        {
+            type:"input",
+            name:"role",
+            message: "What is the role of the employee?"
+        },
+        {
+            type:"input",
+            name: "manager",
+            message:"Please type the employees manager."
+        }
+    ];
+
+    inquirer.prompt(empQ).then(function(employee){
+        connection.query("INSERT INTO employee SET ?", 
+            {
+                first_name: employee.firstName,
+                last_name: employee.lastName,
+                role_id: employee.role,
+                manager_id: employee.manager,
+            },
+            function (err) {
+                if (err) throw err;
+                console.log("Write successful...");
+                menuStart();
+            })    
+        }
+    );
+};
+
+function viewDept(){
+    connection.query("SELECT * FROM department", function(err, res){
+        if(err) throw err;
+        console.table(res);
+        view();
+    })
+}
+
+
+function viewRoles(){
+    connection.query("SELECT * FROM department", function(err, res){
+        if(err) throw err;
+        console.table(res);
+        view();
+    })
+
+}
+
+function viewEmp(){
+    connection.query("SELECT * FROM employee", function(err, res){
+        if(err) throw err;
+        console.table(res);
+        view();
     })
 }

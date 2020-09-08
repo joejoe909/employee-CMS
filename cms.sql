@@ -4,23 +4,26 @@ CREATE database employees_DB;
 USE employees_DB;
 ​
 CREATE TABLE department(
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100) NOT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(100) DEFAULT '' NOT NULL,
+  PRIMARY KEY(id)
 );
 
 CREATE TABLE role (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(30),
-    salary DECIMAL,
-    department_id INT,
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(40),
+    salary DECIMAL default 0,
+    department_id INT NOT NULL,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE employee (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    role_id INT,
-    manager_id INT,
+    id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    role_id VARCHAR(30),
+    manager_id VARCHAR(30),
+    PRIMARY KEY(id)
 );
 ​
 
