@@ -83,7 +83,7 @@ function update(){
     }).then(function(answer){
         //find employee prompt with role to change.
         if(answer.updateRole === "Search"){
-            //searchToUpdateRole()
+            searchToUpdateRole()
         }else if(answer.updateRole === "Back"){
             menuStart();
         }
@@ -132,28 +132,17 @@ function addRole() {
             },
             filter: Number,
         },
-        {
-            type: "input",
-            message: "What is the role ID",
-            name: "roleID",
-            validate: function (value) {
-                let valid = !isNaN(parseFloat(value));
-                return valid || "Please enter a numerical value";
-            },
-            filter: Number,
-        },
     ];
     inquirer.prompt(roleQuestion).then(function (newRole) {
-        connection.query("INSERT INTO department SET ?",
+        connection.query("INSERT INTO role SET ?",
             {
                 title: newRole.title,
-                salary: newRole.salary,
-                department_id: newRole.roleID
+                salary: newRole.salary
             },
             function (err) {
                 if (err) throw err;
                 console.log("Write successful...");
-                menuStart();
+                addMenu();
             });
     });
 }
@@ -223,4 +212,8 @@ function viewEmp(){
         console.table(res);
         view();
     })
+}
+
+function searchToUpdateRole(){
+    
 }
