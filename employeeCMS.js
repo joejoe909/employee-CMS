@@ -103,7 +103,7 @@ function addDepartment(){
     inquirer.prompt(depQuestions).then(function(newDept) {
         connection.query("INSERT INTO department SET ?", 
         {
-           name: newDept.deptName,
+           Department_Name: newDept.deptName,
         },
         function(err){
             if(err)throw err;
@@ -228,7 +228,7 @@ function viewRoles(){
 
 
 function viewEmp(){
-    connection.query("SELECT * FROM employee ", function (err, res) {
+    connection.query("SELECT employee.first_name, employee.last_name, role.title, department.Department_Name, role.salary, employee.manager_id FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id", function (err, res) {
     if(err) throw err;
         console.table(res);
         view();
