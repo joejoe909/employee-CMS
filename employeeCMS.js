@@ -132,12 +132,22 @@ function addRole() {
             },
             filter: Number,
         },
+        {
+            type: "input",
+            message: "What is the department id?",
+            name: "deptID",
+            validate: function(Dvalue){
+                let valid = !isNaN(parseFloat(Dvalue));
+                return valid || "Please enter a numberical value";
+            }
+        }
     ];
     inquirer.prompt(roleQuestion).then(function (newRole) {
         connection.query("INSERT INTO role SET ?",
             {
                 title: newRole.title,
-                salary: newRole.salary
+                salary: newRole.salary,
+                department_id: newRole.deptID
             },
             function (err) {
                 if (err) throw err;
@@ -162,12 +172,22 @@ function addEmployee(){
         {
             type:"input",
             name:"role",
-            message: "What is the role of the employee?"
-        },
+            message: "Please enter the ID of the employee(enter a number)?",
+            validate: function (value) {
+            let valid = !isNaN(parseFloat(value));
+            return valid || "Please enter a numerical value";   
+            filter: Number
+         }
+        },    
         {
             type:"input",
             name: "manager",
-            message:"Please type the employees manager."
+            message:"Please enter the ID the employees manager.",
+            validate: function (value) {
+            let valid = !isNaN(parseFloat(value));
+            return valid || "Please enter a numerical value";
+            filter: Number
+            }
         }
     ];
 
@@ -189,7 +209,7 @@ function addEmployee(){
 };
 
 function viewDept(){
-    connection.query("SELECT * FROM department", function(err, res){
+    connection.query("SELECT * FROM department ", function(err, res){
         if(err) throw err;
         console.table(res);
         view();
@@ -198,7 +218,7 @@ function viewDept(){
 
 
 function viewRoles(){
-    connection.query("SELECT * FROM department", function(err, res){
+    connection.query("SELECT * FROM role ", function(err, res){
         if(err) throw err;
         console.table(res);
         view();
@@ -206,9 +226,10 @@ function viewRoles(){
 
 }
 
+
 function viewEmp(){
-    connection.query("SELECT * FROM employee", function(err, res){
-        if(err) throw err;
+    connection.query("SELECT * FROM employee ", function (err, res) {
+    if(err) throw err;
         console.table(res);
         view();
     })

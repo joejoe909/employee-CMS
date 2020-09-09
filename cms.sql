@@ -22,7 +22,7 @@ CREATE TABLE employee (
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     role_id VARCHAR(30),
-    manager_id VARCHAR(30),
+    manager_id VARCHAR(30) DEFAULT '' NOT NULL,
     PRIMARY KEY(id)
 );
 ​
