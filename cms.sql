@@ -1,8 +1,8 @@
 DROP DATABASE IF EXISTS employees_DB;
 CREATE database employees_DB;
-​
+
 USE employees_DB;
-​
+
 CREATE TABLE department(
   id INT NOT NULL AUTO_INCREMENT,
   Department_Name VARCHAR(100) DEFAULT '' NOT NULL,
@@ -25,16 +25,24 @@ CREATE TABLE employee (
     manager_id VARCHAR(30) DEFAULT '' NOT NULL,
     PRIMARY KEY(id)
 );
-​
 
-INSERT INTO department(id, name)
-VALUES(0, "Human Resources");
+INSERT INTO department(Department_Name)
+VALUES
+("Human Resources"),
+("Software Development"),
+("Accounting");
 
-INSERT INTO role(id, title, salary, department_id)
-VALUES(0, "HR Manager", 120000, 0);
+INSERT INTO role(title, salary, department_id)
+VALUES
+("HR Manager", 120000, 0),
+("Software Developer", 95000, 1),
+("Accountant", 85000, 2);
 
-INSERT INTO employee(id, first_name, last_name, role_id, manager_id)
-VALUES(0, "Katie", "Beckenshaw", 0, 0);
+INSERT INTO employee(first_name, last_name, role_id, manager_id)
+VALUES
+("Katie", "Beckenshaw", 1, 1),
+("John", "Conor",2,1 );
+
 
 
 

@@ -1,0 +1,51 @@
+INSERT INTO department(id, name),
+VALUES(0, "Human Resources");
+
+INSERT INTO role(id, title, salary, department_id),
+VALUES(0, "HR Manager", 120000, 0);
+
+INSERT INTO employee(id, first_name, last_name, role_id, manager_id),
+VALUES(0, "Katie", "Beckenshaw", 0, 0);
+
+
+"SELECT employee.first_name, employee.last_name, role.title, department.departmentName, role.salary, employee.manager_id FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id"
+
+
+"SELECT employee.first_name, employee.last_name, role.title," +
+    "department.name, role.salary, employee.manager_id FROM employee INNER JOIN" +
+    "role_id ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id"
+
+
+SELECT employee.first_name, employee.last_name FROM employees_db.employee INNER JOIN employees_db.role ON employee.role_id=role.id;
+
+
+the best yet..
+SELECT employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id
+////////////////////////////////////////////////////
+SELECT employee.first_name, employee.last_name, role.title, department.Department_Name, role.salary, employee.manager_id FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id
+/////////////////////
+SELECT * FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id=department.id; 
+SELECT * FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id;
+
+SELECT employee.first_name, employee.last_name, role.title, department.Department_Name, employee.manager_id FROM employee INNER JOIN role ON employee.role_id = role.id  INNER JOIN department ON role.department_id = department.id;
+
+┌─────────┬────┬────────────────────────┐
+│ (index) │ id │    Department_Name     │
+├─────────┼────┼────────────────────────┤
+│    0    │ 1  │   'Human Resources'    │
+│    1    │ 2  │ 'Software Development' │
+└─────────┴────┴────────────────────────┘
+? Would you like to view [Departments], [Roles], [employees] or go [Back}? Roles
+┌─────────┬────┬──────────────────────┬────────┬───────────────┐
+│ (index) │ id │        title         │ salary │ department_id │
+├─────────┼────┼──────────────────────┼────────┼───────────────┤
+│    0    │ 1  │     'HR Manager'     │ 120000 │       0       │
+│    1    │ 2  │ 'Software Developer' │ 95000  │       1       │
+└─────────┴────┴──────────────────────┴────────┴───────────────┘
+? Would you like to view [Departments], [Roles], [employees] or go [Back}? Employees
+┌─────────┬────┬────────────┬──────────────┬─────────┬────────────┐
+│ (index) │ id │ first_name │  last_name   │ role_id │ manager_id │
+├─────────┼────┼────────────┼──────────────┼─────────┼────────────┤
+│    0    │ 1  │  'Katie'   │ 'Beckenshaw' │   '0'   │    '0'     │
+│    1    │ 2  │   'John'   │   'Conor'    │   '1'   │    '0'     │
+└─────────┴────┴────────────┴──────────────┴─────────┴────────────┘

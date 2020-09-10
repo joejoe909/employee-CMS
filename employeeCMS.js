@@ -1,5 +1,12 @@
 let mysql = require("mysql");
 let inquirer = require("inquirer");
+let express = require("express");
+
+let app = express();
+var PORT = process.env.PORT || 8080;
+
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 //create connection
 let connection = mysql.createConnection({
@@ -21,16 +28,23 @@ function menuStart(){
         name:"Welcome",
         type: "list",
         message: "Would you like to [Add] to the orginzation, [View] the orginzation or [Update] the orgination?",
-        choices:["Add", "View", "Update", "Quit"]
+        choices:["Add", "View", "Update","Delete", "Quit"]
     }).then(function(answer){
-        if(answer.Welcome === "Add"){
-            addMenu();
-        }else if(answer.Welcome === "View"){
-           view()
-        }else if(answer.Welcome === "Update"){
-            update();
-        }else{
-            connection.end();
+        switch(answer.Welcome){
+            case "Add":
+                addMenu();
+                break;
+            case "View":
+                view();
+                break;
+            case "Update":
+                update();
+                break;
+            case "Delete":
+                deleteEmp();
+                break;    
+            default:
+                connection.end();    
         }
     })
 }
@@ -42,14 +56,19 @@ function addMenu(){
         message: "Would you like to add a [Department], add a [Role] or add an [Employee] or go [Back]?",
         choices:["Department", "Role", "Employee", "Back"]
     }).then(function(answer){
-        if(answer.AddSection === "Department"){
-            addDepartment();
-        }else if(answer.AddSection === "Role"){
-            addRole();
-        }else if(answer.AddSection === "Employee"){
-           addEmployee();
-        }else{
-           menuStart();
+        switch(answer.AddSection){
+            case "Department":
+                addDepartment();
+                break;
+            case "Role":
+                addRole();
+                break;
+            case "Employee":
+                addEmployee();
+                break;
+            default:
+                menuStart();
+                break;    
         }
     })
 }
@@ -61,14 +80,19 @@ function view(){
         message: "Would you like to view [Departments], [Roles], [employees] or go [Back}?",
         choices:["Departments", "Roles", "Employees", "Back"]
     }).then(function(answer){
-        if(answer.ViewSection === "Departments"){
-            viewDept();
-        }else if(answer.ViewSection === "Roles"){
-            viewRoles();
-        }else if(answer.ViewSection === "Employees"){
-            viewEmp();
-        }else{
-            menuStart();
+        switch (answer.ViewSection){
+            case "Departments":
+                viewDept();
+                break;
+            case "Roles":
+                viewRoles();
+                break;
+            case "Employees":
+                viewEmp();
+                break;
+            default:
+                menuStart(); 
+                break;           
         }
     })
 }
@@ -172,7 +196,7 @@ function addEmployee(){
         {
             type:"input",
             name:"role",
-            message: "Please enter the ID of the employee(enter a number)?",
+            message: "Please enter the role_ID of the employee(enter a number)?",
             validate: function (value) {
             let valid = !isNaN(parseFloat(value));
             return valid || "Please enter a numerical value";   
@@ -182,7 +206,7 @@ function addEmployee(){
         {
             type:"input",
             name: "manager",
-            message:"Please enter the ID the employees manager.",
+            message:"Please enter the manager_ID of the employees manager.",
             validate: function (value) {
             let valid = !isNaN(parseFloat(value));
             return valid || "Please enter a numerical value";
@@ -216,7 +240,6 @@ function viewDept(){
     })
 }
 
-
 function viewRoles(){
     connection.query("SELECT * FROM role ", function(err, res){
         if(err) throw err;
@@ -226,9 +249,8 @@ function viewRoles(){
 
 }
 
-
 function viewEmp(){
-    connection.query("SELECT employee.first_name, employee.last_name, role.title, department.Department_Name, role.salary, employee.manager_id FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id", function (err, res) {
+    connection.query("SELECT * FROM employee", function (err, res) {
     if(err) throw err;
         console.table(res);
         view();
@@ -236,5 +258,58 @@ function viewEmp(){
 }
 
 function searchToUpdateRole(){
-    
+    let getEmployee = [
+        {
+            type: "input",
+            message: "Enter the Employee ID you wish to update the role for.",
+            name:"empName",
+            validate: function (value) {
+                let valid = !isNaN(parseFloat(value));
+                return valid || "Please enter a numerical value";
+                filter: Number
+            }
+        },
+        {
+            type: "input",
+            message: "Enter the role ID you wish to change on the employee.",
+            name: "empRole",
+            validate: function (value) {
+                let valid = !isNaN(parseFloat(value));
+                return valid || "Please enter a numerical value";
+                filter: Number
+            }
+        }
+    ];
+
+    inquirer.prompt(getEmployee).then(function(name){
+        connection.query("UPDATE FROM employee WHERE id = ? role_id = ?", name.empID, name.empID,function (err, result) {
+            if (err) { console.log("Could not find ID or another issue exists...") };
+            console.log("updated role of employee with ID of" + name.empID);
+            menuStart();
+        })
+    })
 }
+
+function deleteEmp(){
+    let getEmployee = [
+        {
+            type: "input",
+            message: "Enter the Employee ID you wish to delete",
+            name: "empID",
+            validate: function (value) {
+                let valid = !isNaN(parseFloat(value));
+                return valid || "Please enter a numerical value";
+                filter: Number
+            }
+        },
+    ];
+
+    inquirer.prompt(getEmployee).then(function (name) {
+        connection.query("DELETE FROM employee WHERE id = ?", name.empID, function(err, result){
+            if(err){console.log("Could not find ID or another issue exists...")};
+            console.log("deleted employee with ID of" + name.empID);
+            menuStart();
+        })
+    })
+}
+
