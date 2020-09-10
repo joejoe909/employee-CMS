@@ -1,12 +1,5 @@
 let mysql = require("mysql");
 let inquirer = require("inquirer");
-let express = require("express");
-
-let app = express();
-var PORT = process.env.PORT || 8080;
-
-app.use(express.urlencoded({extended: true}));
-app.use(express.json());
 
 //create connection
 let connection = mysql.createConnection({
@@ -96,24 +89,6 @@ function view(){
         }
     })
 }
-
-
-function update(){
-    inquirer.prompt({
-        name: "updateRole",
-        type: "list",
-        message: "[Search] for employee to update, or go [Back]",
-        choices: ["Search", "Back"]
-    }).then(function(answer){
-        //find employee prompt with role to change.
-        if(answer.updateRole === "Search"){
-            searchToUpdateRole()
-        }else if(answer.updateRole === "Back"){
-            menuStart();
-        }
-    })
-}
-
 
 function addDepartment(){
    let depQuestions = [
@@ -257,12 +232,12 @@ function viewEmp(){
     })
 }
 
-function searchToUpdateRole(){
+function update(){
     let getEmployee = [
         {
             type: "input",
             message: "Enter the Employee ID you wish to update the role for.",
-            name:"empName",
+            name:"empID",
             validate: function (value) {
                 let valid = !isNaN(parseFloat(value));
                 return valid || "Please enter a numerical value";
@@ -282,8 +257,8 @@ function searchToUpdateRole(){
     ];
 
     inquirer.prompt(getEmployee).then(function(name){
-        connection.query("UPDATE FROM employee WHERE id = ? role_id = ?", name.empID, name.empID,function (err, result) {
-            if (err) { console.log("Could not find ID or another issue exists...") };
+        connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [name.empRole, name.empID],function (err, result) {
+            if (err) { console.log("Could not find ID or another issue exists...") }else
             console.log("updated role of employee with ID of" + name.empID);
             menuStart();
         })
