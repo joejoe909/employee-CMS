@@ -3,7 +3,7 @@
 
 ## Description
 
-Node JS and MySQL system to track employees, departments, and occupational roles within an organization.
+Node JS and MySQL system to track employees, departments, and occupational roles within an organization. Watch the video <a href = "https://youtu.be/yDvM_mrnRwI">here</a>
 
      
   - [Description](#description)
