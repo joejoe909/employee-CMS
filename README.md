@@ -1,4 +1,4 @@
-# Employee and Orgnizational Tracking System.
+# Employee and Organizational Tracking System.
 <img src = "./img/et1.png">
 
 ## Description
