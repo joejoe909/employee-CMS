@@ -37,7 +37,8 @@ function menuStart(){
                 deleteEmp();
                 break;    
             default:
-                connection.end();    
+                process.exit(1);
+                break;   
         }
     })
 }
@@ -47,7 +48,7 @@ function addMenu(){
         name: "AddSection",
         type: "list",
         message: "Would you like to add a [Department], add a [Role] or add an [Employee] or go [Back]?",
-        choices:["Department", "Role", "Employee", "Back"]
+        choices:["Department", "Role", "Employee", "Back"],
     }).then(function(answer){
         switch(answer.AddSection){
             case "Department":
@@ -98,7 +99,6 @@ function addDepartment(){
             name: "deptName"
         }
     ];
-
     inquirer.prompt(depQuestions).then(function(newDept) {
         connection.query("INSERT INTO department SET ?", 
         {
@@ -187,9 +187,8 @@ function addEmployee(){
             return valid || "Please enter a numerical value";
             filter: Number
             }
-        }
+        },
     ];
-
     inquirer.prompt(empQ).then(function(employee){
         connection.query("INSERT INTO employee SET ?", 
             {
@@ -201,7 +200,8 @@ function addEmployee(){
             function (err) {
                 if (err) throw err;
                 console.log("Write successful...");
-                menuStart();
+                console.log('\n')
+                addMenu();
             })    
         }
     );
@@ -225,7 +225,7 @@ function viewRoles(){
 }
 
 function viewEmp(){
-    connection.query("SELECT * FROM employee", function (err, res) {
+    connection.query("SELECT e.first_name, e.last_name, r.title, d.Department_Name, r.salary, e.manager_id FROM employee e INNER JOIN role r ON e.role_id = r.id INNER JOIN department d ON r.department_id = d.id;", function (err, res) {
     if(err) throw err;
         console.table(res);
         view();
